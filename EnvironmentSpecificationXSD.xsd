@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XMLSpy v2013 sp1 (http://www.altova.com) by Al Niyas (Hewlett-Packard Co) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="Properties">
+		<xs:sequence>
+			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Service">
+		<xs:sequence>
+			<xs:element name="service_name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="type" type="ServiceType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="serviceInstanceGroups" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="serviceInstanceGroup" type="ServiceInstanceGroup" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="serviceInstances" type="ServiceInstances" minOccurs="0"/>
+			<xs:element name="dependencies" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="dependency" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="id" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>Should refer to an  instanceId of a serviceInstance or an instanceGroupId of a serviceInstanceGroup</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="properties" type="Properties" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ServiceType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DB"/>
+			<xs:enumeration value="REST"/>
+			<xs:enumeration value="EMAIL"/>
+			<xs:enumeration value="XMPP"/>
+			<xs:enumeration value="CACHE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Property">
+		<xs:sequence>
+			<xs:element name="key" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="value" minOccurs="1" maxOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="dependentID"/>
+							<xs:attribute name="dependentPropertyKey"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ServiceInstanceGroup" type="ServiceInstanceGroup"/>
+	<xs:complexType name="ServiceInstanceGroup">
+		<xs:sequence>
+			<xs:element name="instanceGroupID" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="serviceInstances" type="ServiceInstances"/>
+			<xs:element name="dependencies" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="dependency" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="id" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>Should refer to an  instanceId of a serviceInstance or an instanceGroupId of a serviceInstanceGroup</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="properties" type="Properties" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ServiceInstance" type="ServiceInstance"/>
+	<xs:complexType name="ServiceInstance">
+		<xs:sequence>
+			<xs:element name="instanceId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="hostedOn" type="ServiceAccessPoint" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="dependencies" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="dependency" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="id" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>Should refer to an  instanceId of a serviceInstance or an instanceGroupId of a serviceInstanceGroup</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="properties" type="Properties" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ServiceAccessPoint" type="ServiceAccessPoint"/>
+	<xs:complexType name="ServiceAccessPoint">
+		<xs:sequence>
+			<xs:element name="uri" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="system">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="service" type="Service" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ServiceInstances">
+		<xs:sequence>
+			<xs:element name="serviceInstance" type="ServiceInstance" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
